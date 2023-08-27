@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  Platform,
+  Keyboard,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  ScrollView,
+} from "react-native";
 
 import { styles } from "./LoginScreenStyled";
 import InputComponent from "../../components/Input/InputComponent";
@@ -14,73 +23,80 @@ const LoginScreen = () => {
   };
 
   const handleSubmitButtonPress = () => {
-    console.log(login, email, password);
+    console.log({ email, password });
   };
 
   return (
-    <View style={styles.loginContainer}>
-      <Text style={styles.loginFormHeader}>Увійти</Text>
-
-      <View style={styles.loginForm}>
-        <InputComponent
-          placeholder={"Адреса електронної пошти"}
-          type={"email"}
-          name={"email"}
-          value={email}
-          onChangeText={setEmail}
-        />
-
-        <View style={{ position: "relative" }}>
-          <InputComponent
-            placeholder={"Пароль"}
-            type={"password"}
-            name={"password"}
-            secureTextEntry={!showPassword}
-            value={password}
-            onChangeText={setPassword}
-          />
-          <TouchableOpacity
-            style={{
-              position: "absolute",
-              right: 16,
-              top: 16,
-            }}
-            onPress={togglePasswordVisibility}
-          >
-            <Text style={{ color: "#1B4371" }}>
-              {showPassword ? "Приховати" : "Показати"}
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <TouchableOpacity
-        onPress={handleSubmitButtonPress}
-        style={styles.loginFormSubmitButton}
-        title="Зареєструватися"
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <ScrollView
+        contentContainerStyle={styles.loginContainer}
+        keyboardShouldPersistTaps="handled"
       >
-        <Text
-          style={{
-            fontSize: 16,
-            textAlign: "center",
-            color: "#ffffff",
-          }}
+        <Text style={styles.loginFormHeader}>Увійти</Text>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
+          style={styles.loginForm}
         >
-          Увійти
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <Text
-          style={{
-            fontSize: 16,
-            color: "#1B4371",
-            textAlign: "center",
-          }}
+          <InputComponent
+            placeholder={"Адреса електронної пошти"}
+            type={"email"}
+            name={"email"}
+            value={email}
+            onChangeText={setEmail}
+          />
+
+          <View style={{ position: "relative" }}>
+            <InputComponent
+              placeholder={"Пароль"}
+              type={"password"}
+              name={"password"}
+              secureTextEntry={!showPassword}
+              value={password}
+              onChangeText={setPassword}
+            />
+            <TouchableOpacity
+              style={{
+                position: "absolute",
+                right: 16,
+                top: 16,
+              }}
+              onPress={togglePasswordVisibility}
+            >
+              <Text style={{ color: "#1B4371" }}>
+                {showPassword ? "Приховати" : "Показати"}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+
+        <TouchableOpacity
+          onPress={handleSubmitButtonPress}
+          style={styles.loginFormSubmitButton}
+          title="Зареєструватися"
         >
-          Немає aкаунту? Зареєструватися
-        </Text>
-      </TouchableOpacity>
-    </View>
+          <Text
+            style={{
+              fontSize: 16,
+              textAlign: "center",
+              color: "#ffffff",
+            }}
+          >
+            Увійти
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Text
+            style={{
+              fontSize: 16,
+              color: "#1B4371",
+              textAlign: "center",
+            }}
+          >
+            Немає аккаунту? Зареєструватися
+          </Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </TouchableWithoutFeedback>
   );
 };
 
