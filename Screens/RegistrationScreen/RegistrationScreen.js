@@ -26,17 +26,17 @@ const RegistrationScreen = () => {
   const handleSubmitButtonPress = () => {
     console.log(login, email, password);
   };
-  return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.registrationContainer}>
-        <View style={styles.userImageContainer}>
-          <ImageAddButton />
-        </View>
 
-        <Text style={styles.registrationFormHeader}>Реєстрація</Text>
-        <KeyboardAvoidingView // визначаємо ОС та налаштовуємо поведінку клавіатури
-        behavior={Platform.OS == "ios" ? "padding" : "height"}
-      >
+  return (
+    <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.registrationContainer}>
+          <View style={styles.userImageContainer}>
+            <ImageAddButton />
+          </View>
+
+          <Text style={styles.registrationFormHeader}>Реєстрація</Text>
+
           <View style={styles.registrationForm}>
             <InputComponent
               placeholder={"Логін"}
@@ -76,36 +76,36 @@ const RegistrationScreen = () => {
               </TouchableOpacity>
             </View>
           </View>
-        </KeyboardAvoidingView>
 
-        <TouchableOpacity
-          onPress={handleSubmitButtonPress}
-          style={styles.registrationFormSubmitButton}
-          title="Зареєструватися"
-        >
-          <Text
-            style={{
-              fontSize: 16,
-              textAlign: "center",
-              color: "#ffffff",
-            }}
+          <TouchableOpacity
+            onPress={handleSubmitButtonPress}
+            style={styles.registrationFormSubmitButton}
+            title="Зареєструватися"
           >
-            Зареєструватися
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Text
-            style={{
-              fontSize: 16,
-              color: "#1B4371",
-              textAlign: "center",
-            }}
-          >
-            Вже є акаунт? Увійти
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </TouchableWithoutFeedback>
+            <Text
+              style={{
+                fontSize: 16,
+                textAlign: "center",
+                color: "#ffffff",
+              }}
+            >
+              Зареєструватися
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Text
+              style={{
+                fontSize: 16,
+                color: "#1B4371",
+                textAlign: "center",
+              }}
+            >
+              Вже є акаунт? Увійти
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
