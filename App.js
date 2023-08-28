@@ -8,10 +8,10 @@ import { StyleSheet, View } from "react-native";
 
 import RegistrationScreen from "./Screens/RegistrationScreen/RegistrationScreen";
 import LoginScreen from "./Screens/LoginScreen/LoginScreen";
-// import PostsScreen from "./Screens/PostsScreen/PostsScreen";
+import PostsScreen from "./Screens/PostsScreen/PostsScreen";
 // import CommentsScreen from "./Screens/CommentsScreen/CommentsScreen";
 // import MapScreen from "./Screens/MapScreen/MapScreen";
-// import Home from "./Screens/Home/Home";
+import Home from "./Screens/Home/Home";
 
 const MainStack = createStackNavigator(); // вказує на групу навігаторів
 
@@ -29,11 +29,11 @@ export default function App() {
     <View style={styles.container}>
       <NavigationContainer>
         <MainStack.Navigator initialRouteName="Login">
-          {/* <MainStack.Screen
+          <MainStack.Screen
             options={{ headerShown: false }}
             name="Home"
             component={Home}
-          /> */}
+          />
           <MainStack.Screen
             options={{ headerShown: false }}
             name="Registration"
@@ -44,11 +44,11 @@ export default function App() {
             name="Login"
             component={LoginScreen}
           />
-          {/* <MainStack.Screen
+          <MainStack.Screen
             options={{ headerShown: false }}
             name="Posts"
             component={PostsScreen}
-          /> */}
+          />
           {/* <MainStack.Screen
             options={{ headerShown: false }}
             name="Create Post"

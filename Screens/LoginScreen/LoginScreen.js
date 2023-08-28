@@ -10,10 +10,11 @@ import {
   ImageBackground,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { object, string, reach } from "yup";
 
-import { styles } from "./LoginScreenStyled";
 import InputComponent from "../../components/Input/InputComponent";
 import Background from "../../assets/img/app_background.jpg";
+import { styles } from "./LoginScreenStyled";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
@@ -26,13 +27,24 @@ const LoginScreen = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmitButtonPress = () => {
-    navigation.navigate("Home", {
-      screen: "PostScreen",
-      params: {
-        user: "123",
-      },
-    });
+  const validationSchema = object().shape({
+    email: string().email("Введіть коректну електронну пошту").required("Введіть електронну пошту"),
+    password: string().required("Введіть пароль"),
+  });
+
+  const handleSubmitButtonPress = async () => {
+    try {
+      await validationSchema.validate({ email, password });
+      navigation.navigate("Home", {
+        screen: "PostScreen",
+        params: {
+          user: "123",
+        },
+      });
+    } catch (error) {
+      const message = reach(error, "inner[0].message", error.message);
+      alert(message);
+    }
   };
 
   return (
