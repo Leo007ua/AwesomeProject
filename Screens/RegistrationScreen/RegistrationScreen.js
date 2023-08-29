@@ -28,9 +28,9 @@ const RegistrationScreen = () => {
   };
 
   const validationSchema = object().shape({
-    login: string().required("Введіть логін"),
+    login: string().min(3, "Логін повинен містити принаймні 3 символи").required("Введіть логін"),
     email: string().email("Введіть коректну електронну пошту").required("Введіть електронну пошту"),
-    password: string().required("Введіть пароль"),
+    password: string().min(5, "Пароль повинен містити принаймні 5 символів").required("Введіть пароль"),
   });
 
   const handleSubmitButtonPress = async () => {

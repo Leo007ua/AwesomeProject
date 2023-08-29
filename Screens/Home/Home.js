@@ -1,16 +1,16 @@
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 
+import { Text, View } from "react-native";
+import { Svg, Path, Rect } from "react-native-svg";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import PostsScreen from "../PostsScreen/PostsScreen";
 import CreatePostsScreen from "../CreatePostsScreen/CreatePostsScreen";
 import ProfileScreen from "../ProfileScreen/ProfileScreen";
 
-import { Svg, Path, Rect } from "react-native-svg";
-import { Text, View } from "react-native";
-import LogoutBtn from "../../components/Button/LogOutBtn/LogOutBtn";
 import { styles } from "./HomeStyled";
+import LogoutBtn from "../../components/Button/LogOutBtn/LogOutBtn";
 import ReturnBtn from "../../components/Button/ReturnBtn/ReturnBtn";
 
 const Tabs = createBottomTabNavigator();

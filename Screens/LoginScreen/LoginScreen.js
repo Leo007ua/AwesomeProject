@@ -29,7 +29,7 @@ const LoginScreen = () => {
 
   const validationSchema = object().shape({
     email: string().email("Введіть коректну електронну пошту").required("Введіть електронну пошту"),
-    password: string().required("Введіть пароль"),
+    password: string().min(5, "Пароль повинен містити принаймні 5 символів").required("Введіть пароль"),
   });
 
   const handleSubmitButtonPress = async () => {
@@ -64,6 +64,8 @@ const LoginScreen = () => {
             <View style={styles.loginForm}>
               <InputComponent
                 placeholder={"Адреса електронної пошти"}
+                autoCompleteType="email"
+                textContentType="emailAddress" 
                 type={"email"}
                 name={"email"}
                 value={email}
@@ -73,6 +75,8 @@ const LoginScreen = () => {
               <View style={{ position: "relative" }}>
                 <InputComponent
                   placeholder={"Пароль"}
+                  autoCompleteType="password"
+                  textContentType="password"
                   type={"password"}
                   name={"password"}
                   secureTextEntry={!showPassword}
