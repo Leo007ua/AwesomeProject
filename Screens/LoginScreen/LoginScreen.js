@@ -138,6 +138,7 @@ const LoginScreen = () => {
                     fontSize: 16,
                     color: "#1B4371",
                     textAlign: "center",
+                    textDecorationLine: "underline",
                   }}
                 >
                   Зареєструватися
