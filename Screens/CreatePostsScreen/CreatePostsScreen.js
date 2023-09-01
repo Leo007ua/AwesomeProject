@@ -15,12 +15,14 @@ import { Svg, Path, Rect, G, Defs, ClipPath } from "react-native-svg";
 import * as Location from "expo-location";
 
 import { styles } from "./CreatePostsScreenStyled";
+import { AntDesign } from "@expo/vector-icons";
 
 const CreatePostsScreen = () => {
   const [postPhoto, setPostPhoto] = useState(null);
   const [photoName, setPhotoName] = useState("");
   const [photoLocationName, setPhotoLocationName] = useState("");
   const [hasPermission, setHasPermission] = useState(null);
+  const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
   const cameraRef = useRef(null);
 
   useEffect(() => {
@@ -53,6 +55,14 @@ const CreatePostsScreen = () => {
     }
   };
 
+  const toggleCameraType = () => {
+    setCameraType(
+      cameraType === Camera.Constants.Type.back
+        ? Camera.Constants.Type.front
+        : Camera.Constants.Type.back
+    );
+  };
+
   if (hasPermission === null) {
     return <View />;
   }
@@ -63,7 +73,6 @@ const CreatePostsScreen = () => {
   const handleSubmit = () => {
     console.log(submit);
   };
-
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView
@@ -87,7 +96,6 @@ const CreatePostsScreen = () => {
                     borderRadius: 8,
                     width: "100%",
                     height: 240,
-                    aspectRatio: 4 / 3,
                     alignSelf: "center",
                   }}
                   type={Camera.Constants.Type.back}
@@ -130,6 +138,20 @@ const CreatePostsScreen = () => {
                   </TouchableOpacity>
                 </Camera>
               )}
+              <TouchableOpacity
+                onPress={toggleCameraType}
+                style={styles.cameraToggleIcon}
+              >
+                <AntDesign
+                  name={
+                    cameraType === Camera.Constants.Type.back
+                      ? "camerao"
+                      : "camera"
+                  }
+                  size={20}
+                  color="grey"
+                />
+              </TouchableOpacity>
             </View>
 
             <TouchableOpacity>

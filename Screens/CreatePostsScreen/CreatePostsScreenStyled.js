@@ -90,5 +90,13 @@ export const styles = StyleSheet.create({
         borderRadius: 20,
         // marginBottom: 34,
         marginTop: 120,
-    }
+    },
+    cameraToggleIcon: {
+        position: 'absolute',
+        bottom: 10,
+        right: 10,
+        backgroundColor: 'white',
+        borderRadius: 50,
+        padding: 8,
+      },
 });
