@@ -4,7 +4,7 @@ import { Image, Text, View, TouchableOpacity } from "react-native";
 import { Path, Svg } from "react-native-svg";
 import { styles } from "./PostComponentnStyled";
 
-const Post = ({
+const PostComponentn = ({
   image,
   description,
   comments,
@@ -134,4 +134,4 @@ const Post = ({
     </View>
   );
 };
-export default Post;
+export default PostComponentn;

@@ -3,8 +3,8 @@ import { ScrollView, View } from "react-native";
 
 import { styles } from "./PostsScreenStyled";
 import UserInfo from "../../components/UserInfo/UserInfo";
-import { posts } from "../../posts";
 import PostComponentn from "../../components/PostComponentn/PostComponentn";
+import { posts } from "../../posts";
 
 const PostsScreen = () => {
   return (

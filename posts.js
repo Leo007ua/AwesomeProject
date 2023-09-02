@@ -21,7 +21,7 @@ export const posts = [
         ],
         likes: 200,
         locationName: "Ukraine",
-        geoLocation: { latitude: 50.4501, longitude: 30.5234 },
+        geoLocation: { latitude: 49.2714836, longitude: 23.8227551 },
     },
     {
         img: "https://etnosvit.com/wp-content/uploads/Svydovets-karpaty-1.jpg",

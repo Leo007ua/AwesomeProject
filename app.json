@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "goit-react-native-hw-01",
-    "slug": "goit-react-native-hw-01",
+    "name": "AwesomeProject",
+    "slug": "AwesomeProject",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/img/icon.png",
@@ -15,7 +15,10 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "config": {
+        "googleMapsApiKey": "AIzaSyDJtr-V0fNtCBO1HzhoJ1iP53awQMEDsV8"
+      }
     },
     "android": {
       "adaptiveIcon": {
