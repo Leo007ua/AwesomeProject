@@ -1,11 +1,7 @@
-import photo1 from './assets/img/zahid.jpg';
-import photo2 from './assets/img/Goru.jpg';
-import photo3 from './assets/img/Venetsia.jpg';
-
 export const posts = [
     {
-        img: photo1,
-        description: "1",
+        img: "https://photographers.ua/thumbnails/pictures/29237/800ximg_9304_new2_2_verysm.jpg",
+        description: "Захід на Чорному морі",
         comments: [
             {
                 author: "user1",
@@ -28,16 +24,22 @@ export const posts = [
         geoLocation: { latitude: 50.4501, longitude: 30.5234 },
     },
     {
-        img: photo2,
-        description: "2",
-        comments: [],
+        img: "https://etnosvit.com/wp-content/uploads/Svydovets-karpaty-1.jpg",
+        description: "Ліс",
+        comments: [
+            {
+                author: "user1",
+                text: "hello world",
+                date: "31 серпня, 2023 | 19:40",
+            },
+        ],
         likes: 153,
         locationName: "Ukraine",
         geoLocation: { latitude: 50.4501, longitude: 30.5234 },
     },
     {
-        img: photo3,
-        description: "3",
+        img: "https://cdn.create.vista.com/api/media/small/157342002/stock-photo-colourful-wall-of-picturesque-house",
+        description: "Старий будиночок у Венеції",
         comments: [
             {
                 author: "user1",
