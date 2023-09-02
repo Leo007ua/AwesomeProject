@@ -10,18 +10,22 @@ import {
   Keyboard,
   Platform,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { Camera } from "expo-camera";
 import { Svg, Path, Rect, G, Defs, ClipPath } from "react-native-svg";
+import { AntDesign } from "@expo/vector-icons";
 import * as Location from "expo-location";
 
 import { styles } from "./CreatePostsScreenStyled";
-import { AntDesign } from "@expo/vector-icons";
+import { posts } from "../../posts";
 
 const CreatePostsScreen = () => {
   const [postPhoto, setPostPhoto] = useState(null);
   const [photoName, setPhotoName] = useState("");
   const [photoLocationName, setPhotoLocationName] = useState("");
+  const navigation = useNavigation();
   const [hasPermission, setHasPermission] = useState(null);
+  const [currentGeoLocation, setCurrentGeoLocation] = useState({});
   const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
   const cameraRef = useRef(null);
 
@@ -55,6 +59,17 @@ const CreatePostsScreen = () => {
     }
   };
 
+  if (hasPermission === null) {
+    return <View />;
+  }
+  if (hasPermission === false) {
+    return <Text>No access to camera</Text>;
+  }
+
+  const handleReturnPress = () => {
+    console.log("Logout");
+  };
+
   const toggleCameraType = () => {
     setCameraType(
       cameraType === Camera.Constants.Type.back
@@ -70,9 +85,41 @@ const CreatePostsScreen = () => {
     return <Text>No access to camera</Text>;
   }
 
-  const handleSubmit = () => {
-    console.log(submit);
+  const uploadPhoto = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) setPostPhoto(result.assets[0].uri);
   };
+
+  const clearData = () => {
+    setPostPhoto(null);
+    setPhotoName("");
+    setPhotoLocationName("");
+  };
+
+  const handleSubmit = () => {
+    const data = {
+      img: postPhoto,
+      description: photoName,
+      comments: [],
+      likes: 0,
+      locationName: photoLocationName,
+      geoLocation: currentGeoLocation,
+    };
+    posts.unshift(data);
+    clearData();
+    handleNavigateToPosts();
+  };
+
+  const handleNavigateToPosts = () => {
+    navigation.navigate("PostsScreen");
+};
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView
@@ -154,14 +201,16 @@ const CreatePostsScreen = () => {
               </TouchableOpacity>
             </View>
 
-            <TouchableOpacity>
+            <TouchableOpacity onPress={uploadPhoto}>
               <Text
                 style={{
                   marginBottom: 32,
                   fontSize: 16,
                   color: "#BDBDBD",
                 }}
-              ></Text>
+              >
+                {postPhoto ? "Редагувати фото" : "Завантажте фото"}
+              </Text>
             </TouchableOpacity>
 
             <TextInput
@@ -170,9 +219,13 @@ const CreatePostsScreen = () => {
               type={"text"}
               name={"photoName"}
               value={photoName}
+              onChangeText={setPhotoName}
             />
             <View style={{ position: "relative", marginBottom: 32 }}>
-              <TouchableOpacity style={styles.mapButton}>
+              <TouchableOpacity
+                onPress={handleReturnPress}
+                style={styles.mapButton}
+              >
                 <Svg
                   width="24"
                   height="24"
@@ -198,12 +251,14 @@ const CreatePostsScreen = () => {
                   />
                 </Svg>
               </TouchableOpacity>
+
               <TextInput
                 style={[styles.photoMetaInput, { paddingLeft: 28 }]}
                 placeholder="Місцевість..."
                 type={"text"}
                 name={"photoLocation"}
                 value={photoLocationName}
+                onChangeText={setPhotoLocationName}
               />
             </View>
 
@@ -245,7 +300,7 @@ const CreatePostsScreen = () => {
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity style={styles.removePostButton}>
+          <TouchableOpacity onPress={clearData} style={styles.removePostButton}>
             <Svg
               width="24"
               height="24"
@@ -282,5 +337,4 @@ const CreatePostsScreen = () => {
     </TouchableWithoutFeedback>
   );
 };
-
 export default CreatePostsScreen;
