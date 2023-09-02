@@ -2,8 +2,10 @@ import React from "react";
 import { ScrollView, View } from "react-native";
 
 import { styles } from "./PostsScreenStyled";
+
 import UserInfo from "../../components/UserInfo/UserInfo";
-import PostComponentn from "../../components/PostComponentn/PostComponentn";
+import PostComponent from "../../components/PostComponent/PostComponent";
+
 import { posts } from "../../posts";
 
 const PostsScreen = () => {
@@ -24,7 +26,7 @@ const PostsScreen = () => {
             geoLocation,
           }) => {
             return (
-              <PostComponentn
+              <PostComponent
                 key={description}
                 image={img}
                 description={description}

@@ -88,7 +88,6 @@ export const styles = StyleSheet.create({
         height: 40,
         backgroundColor: "#F6F6F6",
         borderRadius: 20,
-        // marginBottom: 34,
         marginTop: 120,
     },
     cameraToggleIcon: {

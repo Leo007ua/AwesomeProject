@@ -9,9 +9,14 @@ import { StyleSheet, View } from "react-native";
 import RegistrationScreen from "./Screens/RegistrationScreen/RegistrationScreen";
 import LoginScreen from "./Screens/LoginScreen/LoginScreen";
 import PostsScreen from "./Screens/PostsScreen/PostsScreen";
-// import CommentsScreen from "./Screens/CommentsScreen/CommentsScreen";
-// import MapScreen from "./Screens/MapScreen/MapScreen";
+import MapScreen from "./Screens/MapScreen/MapScreen";
 import Home from "./Screens/Home/Home";
+import CreatePostsScreen from "./Screens/CreatePostsScreen/CreatePostsScreen";
+import ProfileScreen from "./Screens/ProfileScreen/ProfileScreen";
+import CommentsScreen from "./Screens/CommentsScreen/CommentsScreen";
+
+// import MapView from "react-native-maps";
+// import { PROVIDER_GOOGLE } from "react-native-maps";
 
 const MainStack = createStackNavigator(); // вказує на групу навігаторів
 
@@ -27,6 +32,16 @@ export default function App() {
   }
   return (
     <View style={styles.container}>
+      {/* <MapView
+        style={styles.map}
+        initialRegion={{
+          latitude: 37.78825,
+          longitude: -122.4324,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
+        provider={PROVIDER_GOOGLE}
+      /> */}
       <NavigationContainer>
         <MainStack.Navigator initialRouteName="Login">
           <MainStack.Screen
@@ -49,22 +64,26 @@ export default function App() {
             name="Posts"
             component={PostsScreen}
           />
-          {/* <MainStack.Screen
+          <MainStack.Screen
             options={{ headerShown: false }}
             name="Create Post"
             component={CreatePostsScreen}
-          /> */}
-          {/* <MainStack.Screen
+          />
+          <MainStack.Screen
             options={{ headerShown: false }}
             name="Comments"
             component={CommentsScreen}
-          /> */}
-          {/* <MainStack.Screen
+          />
+          <MainStack.Screen
             options={{ headerShown: false }}
             name="Profile"
             component={ProfileScreen}
-          /> */}
-          {/* <MainStack.Screen name="Map" component={MapScreen} /> */}
+          />
+          <MainStack.Screen
+            options={{ headerShown: false }}
+            name="MapScreen"
+            component={MapScreen}
+          />
         </MainStack.Navigator>
       </NavigationContainer>
     </View>

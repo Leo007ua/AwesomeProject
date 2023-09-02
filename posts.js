@@ -9,7 +9,7 @@ export const posts = [
                 date: "02 червня, 2020 | 08:40",
             },
             {
-                author: "user2",
+                author: "owner",
                 text: "A fast 50mm like f1.8 would help with the bokeh. I’ve been using primes as they tend to get a bit sharper images.",
                 date: "09 червня, 2020 | 09:14",
             },
@@ -24,7 +24,7 @@ export const posts = [
         geoLocation: { latitude: 49.2714836, longitude: 23.8227551 },
     },
     {
-        img: "https://etnosvit.com/wp-content/uploads/Svydovets-karpaty-1.jpg",
+        img: "https://www.tapeciarnia.pl/tapety/normalne/243343_gory_las_droga_kanada.jpg",
         description: "Ліс",
         comments: [
             {
@@ -47,7 +47,7 @@ export const posts = [
                 date: "02 вересня, 2023 | 14:40",
             },
             {
-                author: "user2",
+                author: "owner",
                 text: "hello world",
                 date: "02 вересняня, 2023 | 15:01",
             },

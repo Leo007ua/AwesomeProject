@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Image, Text, View, TouchableOpacity } from "react-native";
 import { Path, Svg } from "react-native-svg";
-import { styles } from "./PostComponentnStyled";
+import { styles } from "./PostComponentStyled";
 
 const PostComponentn = ({
   image,

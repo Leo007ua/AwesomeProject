@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -8,24 +8,26 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
-  Platform,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Camera } from "expo-camera";
 import { Svg, Path, Rect, G, Defs, ClipPath } from "react-native-svg";
-import { AntDesign } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
 import * as Location from "expo-location";
 
-import { styles } from "./CreatePostsScreenStyled";
+import { AntDesign } from "@expo/vector-icons";
 import { posts } from "../../posts";
 
+import { styles } from "./CreatePostsScreenStyled";
+
 const CreatePostsScreen = () => {
+  const navigation = useNavigation();
   const [postPhoto, setPostPhoto] = useState(null);
   const [photoName, setPhotoName] = useState("");
   const [photoLocationName, setPhotoLocationName] = useState("");
-  const navigation = useNavigation();
   const [hasPermission, setHasPermission] = useState(null);
   const [currentGeoLocation, setCurrentGeoLocation] = useState({});
+
   const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
   const cameraRef = useRef(null);
 
@@ -66,10 +68,6 @@ const CreatePostsScreen = () => {
     return <Text>No access to camera</Text>;
   }
 
-  const handleReturnPress = () => {
-    console.log("Logout");
-  };
-
   const toggleCameraType = () => {
     setCameraType(
       cameraType === Camera.Constants.Type.back
@@ -78,12 +76,15 @@ const CreatePostsScreen = () => {
     );
   };
 
-  if (hasPermission === null) {
-    return <View />;
-  }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
+  const handleReturnPress = () => {
+    console.log("Logout");
+  };
+
+  const clearData = () => {
+    setPostPhoto(null);
+    setPhotoName("");
+    setPhotoLocationName("");
+  };
 
   const uploadPhoto = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -96,10 +97,8 @@ const CreatePostsScreen = () => {
     if (!result.canceled) setPostPhoto(result.assets[0].uri);
   };
 
-  const clearData = () => {
-    setPostPhoto(null);
-    setPhotoName("");
-    setPhotoLocationName("");
+  const handleNavigateToPosts = () => {
+    navigation.navigate("PostsScreen");
   };
 
   const handleSubmit = () => {
@@ -115,10 +114,6 @@ const CreatePostsScreen = () => {
     clearData();
     handleNavigateToPosts();
   };
-
-  const handleNavigateToPosts = () => {
-    navigation.navigate("PostsScreen");
-};
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -143,6 +138,7 @@ const CreatePostsScreen = () => {
                     borderRadius: 8,
                     width: "100%",
                     height: 240,
+                    // aspectRatio: 4 / 3,
                     alignSelf: "center",
                   }}
                   type={Camera.Constants.Type.back}
@@ -337,4 +333,5 @@ const CreatePostsScreen = () => {
     </TouchableWithoutFeedback>
   );
 };
+
 export default CreatePostsScreen;
