@@ -71,7 +71,7 @@ export default function App() {
           />
           <MainStack.Screen
             options={{ headerShown: false }}
-            name="Comments"
+            name="CommentsScreen"
             component={CommentsScreen}
           />
           <MainStack.Screen
