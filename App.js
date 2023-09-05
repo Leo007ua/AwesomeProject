@@ -14,9 +14,7 @@ import Home from "./Screens/Home/Home";
 import CreatePostsScreen from "./Screens/CreatePostsScreen/CreatePostsScreen";
 import ProfileScreen from "./Screens/ProfileScreen/ProfileScreen";
 import CommentsScreen from "./Screens/CommentsScreen/CommentsScreen";
-
-// import MapView from "react-native-maps";
-// import { PROVIDER_GOOGLE } from "react-native-maps";
+import store from "./redux/store";
 
 const MainStack = createStackNavigator(); // вказує на групу навігаторів
 
@@ -31,62 +29,54 @@ export default function App() {
     return null;
   }
   return (
-    <View style={styles.container}>
-      {/* <MapView
-        style={styles.map}
-        initialRegion={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
-        provider={PROVIDER_GOOGLE}
-      /> */}
-      <NavigationContainer>
-        <MainStack.Navigator initialRouteName="Login">
-          <MainStack.Screen
-            options={{ headerShown: false }}
-            name="Home"
-            component={Home}
-          />
-          <MainStack.Screen
-            options={{ headerShown: false }}
-            name="Registration"
-            component={RegistrationScreen}
-          />
-          <MainStack.Screen
-            options={{ headerShown: false }}
-            name="Login"
-            component={LoginScreen}
-          />
-          <MainStack.Screen
-            options={{ headerShown: false }}
-            name="Posts"
-            component={PostsScreen}
-          />
-          <MainStack.Screen
-            options={{ headerShown: false }}
-            name="Create Post"
-            component={CreatePostsScreen}
-          />
-          <MainStack.Screen
-            options={{ headerShown: false }}
-            name="CommentsScreen"
-            component={CommentsScreen}
-          />
-          <MainStack.Screen
-            options={{ headerShown: false }}
-            name="Profile"
-            component={ProfileScreen}
-          />
-          <MainStack.Screen
-            options={{ headerShown: false }}
-            name="MapScreen"
-            component={MapScreen}
-          />
-        </MainStack.Navigator>
-      </NavigationContainer>
-    </View>
+    <Provider store={store}>
+      <View style={styles.container}>
+        <NavigationContainer>
+          <MainStack.Navigator initialRouteName="Login">
+            <MainStack.Screen
+              options={{ headerShown: false }}
+              name="Home"
+              component={Home}
+            />
+            <MainStack.Screen
+              options={{ headerShown: false }}
+              name="Registration"
+              component={RegistrationScreen}
+            />
+            <MainStack.Screen
+              options={{ headerShown: false }}
+              name="Login"
+              component={LoginScreen}
+            />
+            <MainStack.Screen
+              options={{ headerShown: false }}
+              name="Posts"
+              component={PostsScreen}
+            />
+            <MainStack.Screen
+              options={{ headerShown: false }}
+              name="Create Post"
+              component={CreatePostsScreen}
+            />
+            <MainStack.Screen
+              options={{ headerShown: false }}
+              name="CommentsScreen"
+              component={CommentsScreen}
+            />
+            <MainStack.Screen
+              options={{ headerShown: false }}
+              name="Profile"
+              component={ProfileScreen}
+            />
+            <MainStack.Screen
+              options={{ headerShown: false }}
+              name="MapScreen"
+              component={MapScreen}
+            />
+          </MainStack.Navigator>
+        </NavigationContainer>
+      </View>
+    </Provider>
   );
 }
 
