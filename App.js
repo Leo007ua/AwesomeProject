@@ -15,6 +15,7 @@ import CreatePostsScreen from "./Screens/CreatePostsScreen/CreatePostsScreen";
 import ProfileScreen from "./Screens/ProfileScreen/ProfileScreen";
 import CommentsScreen from "./Screens/CommentsScreen/CommentsScreen";
 import store from "./redux/store";
+import { Provider } from "react-redux";
 
 const MainStack = createStackNavigator(); // вказує на групу навігаторів
 
