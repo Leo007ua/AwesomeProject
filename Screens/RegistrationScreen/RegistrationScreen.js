@@ -8,68 +8,80 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   ImageBackground,
+  Image,
 } from "react-native";
-import { object, string } from "yup";
 
 import { styles } from "./RegistrationScreenStyled";
+import * as ImagePicker from "expo-image-picker";
 
 import InputComponent from "../../components/Input/InputComponent";
 import ImageAddButton from "../../components/Button/ImageAddButton/ImageAddButton";
 import Background from "../../assets/img/app_background.jpg";
+import { useDispatch, useSelector } from "react-redux";
+import { registration } from "../../redux/auth/authOperations";
+import { selectIsAuthorized } from "../../redux/auth/authSelectors";
+import ImageRemoveButton from "../../components/Button/ImageRemoveButton/ImageRemoveButton";
 
 const RegistrationScreen = () => {
+  const dispatch = useDispatch();
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [loginError, setLoginError] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
   const navigation = useNavigation();
+  const [userAvatar, setUserAavatar] = useState(null);
+  const isAutorized = useSelector(selectIsAuthorized);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmitButtonPress = async () => {
-    setLoginError("");
-    setEmailError("");
-    setPasswordError("");
+  const handleRemoveImage = () => {
+    setUserAavatar(null);
+  };
 
-    const validationSchema = object().shape({
-      login: string()
-        .min(3, "Логін повинен містити принаймні 3 символи")
-        .required("Введіть логін"),
-      email: string()
-        .email("Введіть коректну електронну пошту")
-        .required("Введіть електронну пошту"),
-      password: string()
-        .min(5, "Пароль повинен містити принаймні 5 символів")
-        .required("Введіть пароль"),
+  const handleSubmitButtonPress = () => {
+    if (!login || !email || !password) {
+      alert("Please enter valid credentials!");
+      return;
+    }
+    if (!userAvatar) {
+      alert("Please add user photo!");
+      return;
+    }
+    dispatch(
+      registration({
+        userName: login,
+        email: email,
+        password: password,
+        userPhoto: userAvatar,
+      })
+    ).then((result) => {
+      if (result.type === "authorization/registration/fulfilled") {
+        navigation.navigate("Home", {
+          screen: "PostScreen",
+        });
+      } else if (result.type === "authorization/registration/rejected") {
+        console.error("Registration failed:", result.error);
+        alert("Registration failed: " + result.error.message);
+      }
     });
 
-    try {
-      await validationSchema.validate({ login, email, password });
-      console.warn("Validation successful");
+    isAutorized &&
       navigation.navigate("Home", {
         screen: "PostScreen",
-        params: {
-          user: "123",
-        },
       });
-    } catch (error) {
-      console.warn("Validation error:", error);
-      error.inner.forEach((err) => {
-        const { path, message } = err;
-        if (path === "login") {
-          setLoginError(message);
-        } else if (path === "email") {
-          setEmailError(message);
-        } else if (path === "password") {
-          setPasswordError(message);
-        }
-      });
-    }
+  };
+
+  const uploadAvatar = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 4],
+      quality: 1,
+    });
+
+    if (!result.canceled) setUserAavatar(result.assets[0].uri);
   };
   return (
     <ImageBackground
@@ -81,7 +93,23 @@ const RegistrationScreen = () => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.registrationContainer}>
             <View style={styles.userImageContainer}>
-              <ImageAddButton />
+              {userAvatar && (
+                <Image
+                  source={{ uri: userAvatar }}
+                  style={{
+                    width: 120,
+                    height: 120,
+                    borderRadius: 16,
+                  }}
+                />
+              )}
+              {!userAvatar ? (
+                <ImageAddButton onPress={uploadAvatar}></ImageAddButton>
+              ) : (
+                <ImageRemoveButton
+                  onPress={handleRemoveImage}
+                ></ImageRemoveButton>
+              )}
             </View>
 
             <Text style={styles.registrationFormHeader}>Реєстрація</Text>
@@ -94,9 +122,6 @@ const RegistrationScreen = () => {
                 value={login}
                 onChangeText={setLogin}
               />
-              {loginError !== "" && (
-                <Text style={{ color: "red" }}>{loginError}</Text>
-              )}
 
               <InputComponent
                 placeholder={"Адреса електронної пошти"}
@@ -105,9 +130,6 @@ const RegistrationScreen = () => {
                 value={email}
                 onChangeText={setEmail}
               />
-              {emailError !== "" && (
-                <Text style={{ color: "red" }}>{emailError}</Text>
-              )}
 
               <View style={{ position: "relative" }}>
                 <InputComponent
@@ -118,9 +140,7 @@ const RegistrationScreen = () => {
                   value={password}
                   onChangeText={setPassword}
                 />
-                {passwordError !== "" && (
-                  <Text style={{ color: "red" }}>{passwordError}</Text>
-                )}
+                
                 <TouchableOpacity
                   style={{
                     position: "absolute",

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -10,18 +10,34 @@ import {
   ImageBackground,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { object, string, reach } from "yup";
+import { object, string } from "yup";
 
 import InputComponent from "../../components/Input/InputComponent";
 import Background from "../../assets/img/app_background.jpg";
 import { styles } from "./LoginScreenStyled";
+import { useDispatch, useSelector } from "react-redux";
+import { selectIsAuthorized } from "../../redux/auth/authSelectors";
+import { login } from "../../redux/auth/authOperations";
 
 const LoginScreen = () => {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
   const navigation = useNavigation();
+  const isAutorized = useSelector(selectIsAuthorized);
+
+  const navigateToPostsScreen = () => {
+    navigation.navigate("Home", {
+      screen: "PostsScreen",
+    });
+  };
+
+  useEffect(() => {
+    if (isAutorized) {
+      navigateToPostsScreen();
+    }
+  }, [isAutorized]);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -38,16 +54,22 @@ const LoginScreen = () => {
 
   const handleSubmitButtonPress = async () => {
     try {
-      await validationSchema.validate({ email, password });
-      navigation.navigate("Home", {
-        screen: "PostsScreen",
-        params: {
-          user: "123",
-        },
+      await validationSchema.validate(
+        { email, password },
+        { abortEarly: false }
+      );
+
+      if (!email || !password) {
+        alert("Please enter valid credentials!");
+        return;
+      }
+      dispatch(login({ email, password })).then((result) => {
+        result.type === "authorization/login/fulfilled"
+          ? navigateToPostsScreen()
+          : alert("Incorect data");
       });
     } catch (error) {
-      const message = reach(error, "inner[0].message", error.message);
-      alert(message);
+      alert(error.errors.join("\n"));
     }
   };
 
