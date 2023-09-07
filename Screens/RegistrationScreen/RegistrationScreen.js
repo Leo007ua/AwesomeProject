@@ -44,15 +44,15 @@ const RegistrationScreen = () => {
 
   const handleSubmitButtonPress = () => {
     if (!login || !email || !password) {
-      alert("Please enter valid credentials!");
+      alert("Будь ласка, введіть коректні дані!");
       return;
     }
     if (!userAvatar) {
-      alert("Please add user photo!");
+      alert("Будь ласка, додайте фото користувача!");
       return;
     }
 
-    setIsLoading(true);
+    setIsLoading(true); 
 
     dispatch(
       registration({
@@ -63,20 +63,20 @@ const RegistrationScreen = () => {
       })
     )
       .then((result) => {
-        setIsLoading(false);
+        setIsLoading(false); 
 
         if (result.type === "authorization/registration/fulfilled") {
           navigation.navigate("Home", {
             screen: "PostScreen",
           });
         } else {
-          alert("Incorrect data");
+          alert("Некоректні дані");
         }
       })
       .catch((error) => {
         console.error(error);
-        alert("Registration failed. Please try again later.");
-        setIsLoading(false);
+        alert("Реєстрація не вдалася. Спробуйте ще раз пізніше.");
+        setIsLoading(false); 
       });
   };
 
@@ -88,7 +88,7 @@ const RegistrationScreen = () => {
       quality: 1,
     });
 
-    if (!result.canceled) setUserAvatar(result.assets[0].uri);
+    if (!result.canceled) setUserAvatar(result.assets[0].uri); 
   };
 
   return (
@@ -148,7 +148,6 @@ const RegistrationScreen = () => {
                   value={password}
                   onChangeText={setPassword}
                 />
-
                 <TouchableOpacity
                   style={{
                     position: "absolute",
@@ -168,10 +167,10 @@ const RegistrationScreen = () => {
               onPress={handleSubmitButtonPress}
               style={styles.registrationFormSubmitButton}
               title="Зареєструватися"
-              disabled={isLoading} // Вимкнути кнопку під час завантаження
+              disabled={isLoading} 
             >
               {isLoading ? (
-                <ActivityIndicator size="small" color="#ffffff" /> // Відображення індикатора завантаження під час isLoading
+                <ActivityIndicator size="small" color="#ffffff" /> 
               ) : (
                 <Text
                   style={{
@@ -201,7 +200,9 @@ const RegistrationScreen = () => {
               >
                 Вже є акаунт?
               </Text>
-              <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("LoginScreen")}
+              >
                 <Text
                   style={{
                     gap: 3,
