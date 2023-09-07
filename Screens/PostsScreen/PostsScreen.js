@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 const PostsScreen = () => {
   const posts = useSelector(selectAllPosts);
   const dispatch = useDispatch();
-  const sortedPosts = [...posts].sort((a, b) => {
+  let sortedPosts = [...posts].sort((a, b) => {
     const dateA = Object.values(a)[0].date;
     const dateB = Object.values(b)[0].date;
     return new Date(dateB).getTime() - new Date(dateA).getTime();
@@ -36,29 +36,9 @@ const PostsScreen = () => {
         {sortedPosts.length === 0 ? (
           <View></View>
         ) : (
-          sortedPosts.map((item) => {
-            const key = Object.keys(item)[0];
-            const {
-              img,
-              description,
-              likes,
-              comments,
-              locationName,
-              geoLocation,
-            } = item[key];
-            return (
-              <PostComponent
-                key={key}
-                id={key}
-                image={img}
-                description={description}
-                likes={likes}
-                comments={comments ? comments : []}
-                locationName={locationName}
-                geoLocation={geoLocation}
-              />
-            );
-          })
+          sortedPosts.map((item, index) => (
+            <PostComponent key={index} item={item} />
+          ))
         )}
       </ScrollView>
     </View>
