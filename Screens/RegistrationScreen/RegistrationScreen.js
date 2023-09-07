@@ -9,6 +9,7 @@ import {
   TouchableWithoutFeedback,
   ImageBackground,
   Image,
+  ActivityIndicator,
 } from "react-native";
 
 import { styles } from "./RegistrationScreenStyled";
@@ -29,15 +30,16 @@ const RegistrationScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [userAvatar, setUserAavatar] = useState(null);
-  const isAutorized = useSelector(selectIsAuthorized);
+  const [userAvatar, setUserAvatar] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const isAuthorized = useSelector(selectIsAuthorized);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
   const handleRemoveImage = () => {
-    setUserAavatar(null);
+    setUserAvatar(null);
   };
 
   const handleSubmitButtonPress = () => {
@@ -49,6 +51,9 @@ const RegistrationScreen = () => {
       alert("Please add user photo!");
       return;
     }
+
+    setIsLoading(true);
+
     dispatch(
       registration({
         userName: login,
@@ -56,17 +61,22 @@ const RegistrationScreen = () => {
         password: password,
         userPhoto: userAvatar,
       })
-    ).then((result) => {
-      result.type === "authorization/registration/fulfilled"
-        ? navigation.navigate("Home", {
-            screen: "PostScreen",
-          })
-        : alert("Incorect data");
-    });
+    )
+      .then((result) => {
+        setIsLoading(false);
 
-    isAutorized &&
-      navigation.navigate("Home", {
-        screen: "PostScreen",
+        if (result.type === "authorization/registration/fulfilled") {
+          navigation.navigate("Home", {
+            screen: "PostScreen",
+          });
+        } else {
+          alert("Incorrect data");
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        alert("Registration failed. Please try again later.");
+        setIsLoading(false);
       });
   };
 
@@ -78,9 +88,9 @@ const RegistrationScreen = () => {
       quality: 1,
     });
 
-    if (!result.canceled) setUserAavatar(result.assets[0].uri);
+    if (!result.canceled) setUserAvatar(result.assets[0].uri);
   };
-  
+
   return (
     <ImageBackground
       source={Background}
@@ -158,21 +168,25 @@ const RegistrationScreen = () => {
               onPress={handleSubmitButtonPress}
               style={styles.registrationFormSubmitButton}
               title="Зареєструватися"
+              disabled={isLoading} // Вимкнути кнопку під час завантаження
             >
-              <Text
-                style={{
-                  fontSize: 16,
-                  textAlign: "center",
-                  color: "#ffffff",
-                }}
-              >
-                Реєструватися
-              </Text>
+              {isLoading ? (
+                <ActivityIndicator size="small" color="#ffffff" /> // Відображення індикатора завантаження під час isLoading
+              ) : (
+                <Text
+                  style={{
+                    fontSize: 16,
+                    textAlign: "center",
+                    color: "#ffffff",
+                  }}
+                >
+                  Реєструватися
+                </Text>
+              )}
             </TouchableOpacity>
 
             <View
               style={{
-                display: "flex",
                 flexDirection: "row",
                 gap: 3,
                 justifyContent: "center",
