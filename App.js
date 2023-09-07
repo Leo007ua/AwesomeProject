@@ -7,6 +7,7 @@ import { useFonts } from "expo-font";
 import { StyleSheet, View } from "react-native";
 
 import RegistrationScreen from "./Screens/RegistrationScreen/RegistrationScreen";
+
 import LoginScreen from "./Screens/LoginScreen/LoginScreen";
 import PostsScreen from "./Screens/PostsScreen/PostsScreen";
 import MapScreen from "./Screens/MapScreen/MapScreen";
@@ -46,7 +47,7 @@ export default function App() {
             />
             <MainStack.Screen
               options={{ headerShown: false }}
-              name="Login"
+              name="LoginScreen"
               component={LoginScreen}
             />
             <MainStack.Screen

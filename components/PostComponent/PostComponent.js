@@ -13,7 +13,7 @@ import { addLike } from "../../redux/posts/postsOperations";
 import { selectUserId } from "../../redux/auth/authSelectors";
 import { useDispatch, useSelector } from "react-redux";
 
-const PostComponentn = ({ item }) => {
+const PostComponent = ({ item }) => {
   const navigation = useNavigation();
   let { img, description, comments, likes, locationName, geoLocation } = item;
   const dispatch = useDispatch();
@@ -23,11 +23,11 @@ const PostComponentn = ({ item }) => {
     (item) => item.author === userId
   );
 
-  const hadndlePressLike = () => {
+  const handlePressLike = () => {
     dispatch(addLike([item.id, { author: userId, count: 1 }]));
   };
 
-  const hadleLiked = () => {
+  const handleLiked = () => {
     return;
   };
 
@@ -52,13 +52,17 @@ const PostComponentn = ({ item }) => {
               })
             }
           >
-            {comments.length === 0 ? <CommentIcon /> : <CommentOrangeIcon />}
+            {comments && comments.length === 0 ? (
+              <CommentIcon />
+            ) : (
+              <CommentOrangeIcon />
+            )}
           </TouchableOpacity>
-          <Text>{comments.length}</Text>
+          <Text>{comments ? comments.length : 0}</Text>
         </View>
         <View style={{ display: "flex", flexDirection: "row", gap: 6 }}>
           <TouchableOpacity
-            onPress={isLiked.length === 0 ? hadndlePressLike : hadleLiked}
+            onPress={isLiked.length === 0 ? handlePressLike : handleLiked}
           >
             <LikesIcon />
           </TouchableOpacity>
@@ -73,15 +77,17 @@ const PostComponentn = ({ item }) => {
             alignItems: "center",
           }}
         >
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("MapScreen", {
-                params: geoLocation,
-              })
-            }
-          >
-            <MapIcon />
-          </TouchableOpacity>
+          {geoLocation && (
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("MapScreen", {
+                  params: geoLocation,
+                })
+              }
+            >
+              <MapIcon />
+            </TouchableOpacity>
+          )}
           <Text>{locationName}</Text>
         </View>
       </View>
@@ -89,4 +95,4 @@ const PostComponentn = ({ item }) => {
   );
 };
 
-export default PostComponentn;
+export default PostComponent;

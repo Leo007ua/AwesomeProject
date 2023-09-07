@@ -19,6 +19,7 @@ import {
 import { selectAllPosts } from "../../redux/posts/postsSelectors";
 import { getPosts } from "../../redux/posts/postsOperations";
 import { uploadNewAvatar } from "../../redux/auth/authOperations";
+import { styles } from "./ProfileScreenStyled";
 
 const ProfileScreen = () => {
   const userId = useSelector(selectUserId);

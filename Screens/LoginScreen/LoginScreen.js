@@ -141,7 +141,6 @@ const LoginScreen = () => {
             </TouchableOpacity>
             <View
               style={{
-                display: "flex",
                 flexDirection: "row",
                 gap: 3,
                 justifyContent: "center",
