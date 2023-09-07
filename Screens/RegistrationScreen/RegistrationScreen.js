@@ -16,19 +16,19 @@ import * as ImagePicker from "expo-image-picker";
 
 import InputComponent from "../../components/Input/InputComponent";
 import ImageAddButton from "../../components/Button/ImageAddButton/ImageAddButton";
+import ImageRemoveButton from "../../components/Button/ImageRemoveButton/ImageRemoveButton";
 import Background from "../../assets/img/app_background.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { registration } from "../../redux/auth/authOperations";
 import { selectIsAuthorized } from "../../redux/auth/authSelectors";
-import ImageRemoveButton from "../../components/Button/ImageRemoveButton/ImageRemoveButton";
 
 const RegistrationScreen = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const navigation = useNavigation();
   const [userAvatar, setUserAavatar] = useState(null);
   const isAutorized = useSelector(selectIsAuthorized);
 
@@ -57,14 +57,11 @@ const RegistrationScreen = () => {
         userPhoto: userAvatar,
       })
     ).then((result) => {
-      if (result.type === "authorization/registration/fulfilled") {
-        navigation.navigate("Home", {
-          screen: "PostScreen",
-        });
-      } else if (result.type === "authorization/registration/rejected") {
-        console.error("Registration failed:", result.error);
-        alert("Registration failed: " + result.error.message);
-      }
+      result.type === "authorization/registration/fulfilled"
+        ? navigation.navigate("Home", {
+            screen: "PostScreen",
+          })
+        : alert("Incorect data");
     });
 
     isAutorized &&
@@ -83,6 +80,7 @@ const RegistrationScreen = () => {
 
     if (!result.canceled) setUserAavatar(result.assets[0].uri);
   };
+  
   return (
     <ImageBackground
       source={Background}
@@ -140,7 +138,7 @@ const RegistrationScreen = () => {
                   value={password}
                   onChangeText={setPassword}
                 />
-                
+
                 <TouchableOpacity
                   style={{
                     position: "absolute",

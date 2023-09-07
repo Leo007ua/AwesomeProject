@@ -1,30 +1,74 @@
-import React from "react";
-import { Image, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
-import ReturnBtn from "../../components/Button/ReturnBtn/ReturnBtn";
-import { styles } from "./CommentsScreenStyled";
-import CommentComponent from "../../components/CommentComponent/CommentComponent";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import React, { useState, useEffect } from "react";
+import { useRoute, useNavigation } from "@react-navigation/native";
+import {
+  View,
+  Text,
+  Image,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import urid from "urid";
 
-import userPhoto from "../../assets/img/User.jpg";
-import commentatorPhoto from "../../assets/img/comentator.png";
-import { Path, Svg } from "react-native-svg";
+
+import ReturnBtn from "../../components/Button/ReturnBtn/ReturnBtn";
+import CommentComponent from "../../components/CommentComponent/CommentComponent";
+import { SendIcon } from "../../components/SvgIcons/SvgIcons";
+import { addComment, getPosts } from "../../redux/posts/postsOperations";
+import { selectUserId } from "../../redux/auth/authSelectors";
+import { selectComments } from "../../redux/posts/postsSelectors";
+import { styles } from "./CommentsScreenStyled";
 
 const CommentsScreen = () => {
+  const [comment, setComment] = useState("");
+  const [submittingComment, setSubmittingComment] = useState(false);
+  const userId = useSelector(selectUserId);
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const {
     params: {
-      params: { comments, image },
+      params: { image, id },
     },
   } = useRoute();
+  const comments = useSelector((state) => selectComments(state, id));
+
+  const compareDates = (a, b) => {
+    return new Date(a.date) - new Date(b.date);
+  };
 
   const handleReturnPress = () => {
     navigation.navigate("Home", {
       screen: "PostScreen",
-      params: {
-        user: "123",
-      },
     });
   };
+
+  const handleSubmit = () => {
+    if (comment === "") {
+      return;
+    }
+    setSubmittingComment(true);
+    dispatch(
+      addComment([
+        id,
+        {
+          id: urid(),
+          author: userId,
+          text: comment,
+          date: new Date(),
+        },
+      ])
+    );
+    setComment("");
+  };
+
+  useEffect(() => {
+    if (submittingComment) {
+      dispatch(getPosts());
+      setSubmittingComment(false); 
+    }
+    return;
+  }, [dispatch]);
 
   return (
     <View style={styles.commentsScreenContainer}>
@@ -54,33 +98,34 @@ const CommentsScreen = () => {
         style={{ margin: 0, padding: 0 }}
         showsVerticalScrollIndicator={false}
       >
-        {comments.map(({ author, text, date }) => {
-          return (
-            <CommentComponent
-              key={text}
-              author={author}
-              text={text}
-              date={date}
-              userIcon={author === "owner" ? userPhoto : commentatorPhoto}
-            />
-          );
-        })}
+        {comments ? (
+          Object.values(comments)
+            .sort(compareDates)
+            .map(({ id, author, text, date }) => {
+              return (
+                <CommentComponent
+                  key={id}
+                  author={author}
+                  text={text}
+                  date={date}
+                />
+              );
+            })
+        ) : (
+          <View></View>
+        )}
       </ScrollView>
       <View style={styles.container}>
-        <TextInput style={styles.input} placeholder="Коментувати..." />
-        <TouchableOpacity style={styles.button}>
-          <Svg
-            width="12"
-            height="16"
-            viewBox="0 0 12 16"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <Path
-              d="M6 1L6.35355 0.646447C6.15829 0.451184 5.84171 0.451184 5.64645 0.646447L6 1ZM10.6464 6.35355C10.8417 6.54882 11.1583 6.54882 11.3536 6.35355C11.5488 6.15829 11.5488 5.84171 11.3536 5.64645L10.6464 6.35355ZM0.646447 5.64645C0.451184 5.84171 0.451184 6.15829 0.646447 6.35355C0.841709 6.54882 1.15829 6.54882 1.35355 6.35355L0.646447 5.64645ZM5.5 15C5.5 15.2761 5.72386 15.5 6 15.5C6.27614 15.5 6.5 15.2761 6.5 15H5.5ZM5.64645 1.35355L10.6464 6.35355L11.3536 5.64645L6.35355 0.646447L5.64645 1.35355ZM5.64645 0.646447L0.646447 5.64645L1.35355 6.35355L6.35355 1.35355L5.64645 0.646447ZM5.5 1V8H6.5V1H5.5ZM5.5 8V15H6.5V8H5.5Z"
-              fill="white"
-            />
-          </Svg>
+        <TextInput
+          style={styles.input}
+          type={"text"}
+          name={"comment"}
+          placeholder="Коментувати..."
+          value={comment}
+          onChangeText={setComment}
+        />
+        <TouchableOpacity onPress={handleSubmit} style={styles.button}>
+          <SendIcon />
         </TouchableOpacity>
       </View>
     </View>
