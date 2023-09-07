@@ -34,7 +34,7 @@ export default function App() {
     <Provider store={store}>
       <View style={styles.container}>
         <NavigationContainer>
-          <MainStack.Navigator initialRouteName="Login">
+          <MainStack.Navigator initialRouteName="LoginScreen">
             <MainStack.Screen
               options={{ headerShown: false }}
               name="Home"
@@ -71,7 +71,7 @@ export default function App() {
               component={ProfileScreen}
             />
             <MainStack.Screen
-              options={{ headerShown: false }}
+              options={{ headerShown: true }}
               name="MapScreen"
               component={MapScreen}
             />

@@ -10,11 +10,17 @@ const initialState = {
   isAuthorized: false,
   error: null,
   isLoading: false,
+  userData: null,
 };
 
 const authorizationSlice = createSlice({
   name: "authorization",
   initialState,
+  reducers: {
+    setUser: (state, action) => {
+      state.userData = action.payload
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(registration.pending, (state) => {
@@ -94,3 +100,4 @@ const authorizationSlice = createSlice({
 });
 
 export default authorizationSlice.reducer;
+export const { setUser } = authorizationSlice.actions;

@@ -18,6 +18,9 @@ import { styles } from "./LoginScreenStyled";
 import { useDispatch, useSelector } from "react-redux";
 import { selectIsAuthorized } from "../../redux/auth/authSelectors";
 import { login } from "../../redux/auth/authOperations";
+import { auth } from "../../firebase/config";
+import { selectUserData } from "../../redux/auth/authSelectors";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 const LoginScreen = () => {
   const dispatch = useDispatch();
@@ -26,6 +29,9 @@ const LoginScreen = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigation = useNavigation();
   const isAutorized = useSelector(selectIsAuthorized);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const userData = useSelector(selectUserData);
 
   const navigateToPostsScreen = () => {
     navigation.navigate("Home", {
@@ -53,25 +59,29 @@ const LoginScreen = () => {
   });
 
   const handleSubmitButtonPress = async () => {
-    try {
-      await validationSchema.validate(
-        { email, password },
-        { abortEarly: false }
-      );
-
-      if (!email || !password) {
-        alert("Please enter valid credentials!");
-        return;
-      }
-      dispatch(login({ email, password })).then((result) => {
-        result.type === "authorization/login/fulfilled"
-          ? navigateToPostsScreen()
-          : alert("Incorect data");
-      });
-    } catch (error) {
-      alert(error.errors.join("\n"));
+    if (!login || !email || !password) {
+      alert("Будь ласка, введіть коректні дані!");
+      return;
     }
+    setIsLoading(true); // Включити індикацію завантаження
+    (async ()=> {try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password)
+      const user = userCredential.user
+      dispatch(setUser(user))
+      setIsLoading(false);
+    } catch (error) {
+      const errorCode = error.code
+      const errorMessage = error.message
+      alert (errorMessage)
+      setIsLoading(false);
+    }})()
   };
+  useEffect(() => {
+    userData &&
+      navigation.navigate("Home", {
+        screen: "PostsScreen",
+      });
+  }, [userData?.uid]);
 
   return (
     <ImageBackground

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Image,
@@ -22,6 +22,10 @@ import InputComponent from "../../components/Input/InputComponent";
 import { registration } from "../../redux/auth/authOperations";
 import { selectIsAuthorized } from "../../redux/auth/authSelectors";
 import { styles } from "./RegistrationScreenStyled";
+import { setUser } from "../../redux/auth/authSlice";
+import { selectUserData } from "../../redux/auth/authSelectors";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../firebase/config";
 
 const RegistrationScreen = () => {
   const dispatch = useDispatch();
@@ -33,6 +37,8 @@ const RegistrationScreen = () => {
   const [userAvatar, setUserAvatar] = useState(null);
   const isAuthorized = useSelector(selectIsAuthorized);
   const [isLoading, setIsLoading] = useState(false);
+
+  const userData = useSelector(selectUserData);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -47,42 +53,28 @@ const RegistrationScreen = () => {
       alert("Будь ласка, введіть коректні дані!");
       return;
     }
-    if (!userAvatar) {
-      alert("Будь ласка, додайте фото користувача!");
-      return;
-    }
+    // if (!userAvatar) {
+    //   alert("Будь ласка, додайте фото користувача!");
+    //   return;
+    // }
     setIsLoading(true); // Включити індикацію завантаження
-
-    dispatch(
-      registration({
-        userName: login,
-        email: email,
-        password: password,
-        userPhoto: userAvatar,
-      })
-    )
-      .then((result) => {
-        setIsLoading(false); // Вимкнути індикацію завантаження
-
-        if (result.type === "authorization/registration/fulfilled") {
-          navigation.navigate("Home", {
-            screen: "PostsScreen",
-          });
-        } else {
-          alert("Некоректні дані");
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-        alert("Реєстрація не вдалася. Спробуйте ще раз пізніше.");
-        setIsLoading(false); // Вимкнути індикацію завантаження в разі помилки
-      });
-
-    isAuthorized &&
-      navigation.navigate("Home", {
-        screen: "PostsScreen",
-      });
+    (async ()=> {try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+      const user = userCredential.user
+      dispatch(setUser(user))
+      setIsLoading(false);
+    } catch (error) {
+      const errorCode = error.code
+      const errorMessage = error.message
+      alert (errorMessage)
+      setIsLoading(false);
+    }})()
   };
+useEffect(() => {
+  userData && navigation.navigate("Home", {
+    screen: "PostsScreen",
+  });
+}, [userData?.uid])
 
   const uploadAvatar = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({

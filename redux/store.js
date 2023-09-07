@@ -30,26 +30,7 @@ const store = configureStore({
   reducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [
-          FLUSH,
-          REHYDRATE,
-          PAUSE,
-          PERSIST,
-          PURGE,
-          REGISTER,
-          "authorization/registration/fulfilled",
-          "authorization/login/fulfilled",
-          "authorization/uploadNewAvatar/fulfilled",
-          "posts/addPosts/fulfilled",
-          "posts/getPosts/fulfilled",
-          "posts/addComment/fulfilled",
-          "posts/getComments/fulfilled",
-          "posts/getCommmentatorsPhoto/fulfilled",
-          "posts/addLike/fulfilled",
-        ],
-        ignoredPaths: ["firebase", "firestore"],
-      },
+      serializableCheck: false,
     }),
 });
 

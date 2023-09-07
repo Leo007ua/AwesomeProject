@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
-import { ScrollView, View } from "react-native";
+import { ScrollView, View, TouchableOpacity, Text } from "react-native";
+import firebase from "firebase/app";
+import "firebase/auth";
+import { useNavigation } from "@react-navigation/native";
 
 import { styles } from "./PostsScreenStyled";
-
 import UserInfo from "../../components/UserInfo/UserInfo";
 import PostComponent from "../../components/PostComponent/PostComponent";
 import { selectAllPosts } from "../../redux/posts/postsSelectors";
@@ -10,8 +12,8 @@ import {
   getCommmentatorsPhoto,
   getPosts,
 } from "../../redux/posts/postsOperations";
-
 import { useDispatch, useSelector } from "react-redux";
+import { auth, signOut } from "firebase/auth";
 
 const PostsScreen = () => {
   const posts = useSelector(selectAllPosts);
@@ -22,10 +24,15 @@ const PostsScreen = () => {
     return new Date(dateB).getTime() - new Date(dateA).getTime();
   });
 
+  sortedPosts = sortedPosts.map((i) => Object.values(i)[0])
+
   useEffect(() => {
     dispatch(getPosts());
     dispatch(getCommmentatorsPhoto());
   }, [dispatch]);
+
+  
+
   return (
     <View style={styles.postsScreenContainer}>
       <UserInfo />

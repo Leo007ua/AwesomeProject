@@ -12,11 +12,21 @@ import ProfileScreen from "../ProfileScreen/ProfileScreen";
 import { styles } from "./HomeStyled";
 import LogoutBtn from "../../components/Button/LogOutBtn/LogOutBtn";
 import ReturnBtn from "../../components/Button/ReturnBtn/ReturnBtn";
+import { auth } from "../../firebase/config";
+import { signOut } from "firebase/auth";
+import { setUser } from "../../redux/auth/authSlice";
+import { useDispatch } from "react-redux";
 
 const Tabs = createBottomTabNavigator();
 
 const Home = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const logOut = () => {
+    signOut(auth);
+    dispatch(setUser(null));
+    navigation.navigate("LoginScreen");
+  };
 
   return (
     <Tabs.Navigator screenOptions={styles.homeContainer}>
@@ -29,7 +39,7 @@ const Home = () => {
           ),
           headerRight: () => (
             <View style={{ marginRight: 16 }}>
-              <LogoutBtn onPress={() => navigation.navigate("Login")} />
+              <LogoutBtn onPress={logOut} />
             </View>
           ),
           tabBarIcon: () => (

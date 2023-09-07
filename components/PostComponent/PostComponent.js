@@ -15,14 +15,15 @@ import { useDispatch, useSelector } from "react-redux";
 
 const PostComponent = ({ item }) => {
   const navigation = useNavigation();
-  let { img, description, comments, likes, locationName, geoLocation } = item;
+  let { img, description, comments, likes, locationName, geoLocation, userId } = item;
   const dispatch = useDispatch();
-  const userId = useSelector(selectUserId);
+  // const userId = useSelector(selectUserId);
   const likesCount = likes ? Object.values(likes).length : 0;
   const isLiked = Object.values(likes ? likes : []).filter(
     (item) => item.author === userId
   );
-
+  ``;
+  
   const handlePressLike = () => {
     dispatch(addLike([item.id, { author: userId, count: 1 }]));
   };
@@ -30,7 +31,9 @@ const PostComponent = ({ item }) => {
   const handleLiked = () => {
     return;
   };
-
+  
+  comments ? (comments = Object.values(comments)) : (comments = []);
+  
   return (
     <View style={{ position: "relative", marginBottom: 32 }}>
       <Image
@@ -47,9 +50,7 @@ const PostComponent = ({ item }) => {
         <View style={{ flexDirection: "row", gap: 6 }}>
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate("CommentsScreen", {
-                params: { comments, img },
-              })
+              navigation.navigate("CommentsScreen")
             }
           >
             {comments && comments.length === 0 ? (

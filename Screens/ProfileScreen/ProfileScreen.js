@@ -41,7 +41,7 @@ const ProfileScreen = () => {
 
   useEffect(() => {
     dispatch(getPosts());
-  }, [sortedUserPosts]);
+  }, []);
 
   const handleRemoveImage = () => {
     setUserAavatar(null);

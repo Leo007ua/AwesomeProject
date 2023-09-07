@@ -24,14 +24,12 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 // Ініціалізація Firebase Auth з використанням React Native Async Storage
-const auth = initializeAuth(app, {
+export const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(ReactNativeAsyncStorage),
 });
-const db = getFirestore(app);
-const database = getDatabase(app);
-const storage = getStorage(app);
+export const db = getFirestore(app);
+export const database = getDatabase(app);
+export const storage = getStorage(app);
 
-export { auth };
-export { db };
-export { database };
-export { storage };
+
+
